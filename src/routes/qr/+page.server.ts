@@ -1,51 +1,35 @@
-import type { PageServerLoad } from './$types';
+import type { PageServerLoad, Actions } from './$types';
 import { db } from "$lib/server/db/index";
 import { cards, events, auths } from "$lib/server/db/schema";
 import { eq } from "drizzle-orm";
+import { fail, error } from '@sveltejs/kit';
+import Ajv from "ajv";
+
+const ajv = new Ajv({ allErrors: true });
 
 export const load: PageServerLoad = async ({ url }) => {
     const id = url.searchParams.get("id");
 
     if (!id) {
-        return {
-            error: "Card ID is required",
-            card: null,
-            event: null,
-            auth: null
-        }
+        return error(400, "Card ID is required");
     }
 
     const card = db.select().from(cards).where(eq(cards.ID, id)).get();
 
     if (!card) {
-        return {
-            error: "Card not found",
-            card: null,
-            event: null,
-            auth: null
-        };
+        return error(404, "Card not found");
     }
 
     const event = db.select().from(events).where(eq(events.ID, card.eventID)).get();
 
     if (!event) {
-        return {
-            error: "Event not found",
-            card,
-            event: null,
-            auth: null
-        };
+        return error(404, "Event not found");
     }
 
     const auth = db.select().from(auths).where(eq(auths.ID, card.authID)).get();
 
     if (!auth) {
-        return {
-            error: "Auth not found",
-            card,
-            event: null,
-            auth: null
-        };
+        return error(404, "Auth not found");
     }
 
     const bluredAuth = {
@@ -57,3 +41,49 @@ export const load: PageServerLoad = async ({ url }) => {
 
     return { error: null, card, event, auth: bluredAuth };
 };
+
+export const actions: Actions = {
+    default: async ({ request }) => {
+        const formData = await request.formData();
+        const cardID = formData.get("cardID");  
+
+        if (typeof cardID !== "string") {
+            return fail(400, { error: "Card ID is required" });
+        }
+
+        const card = db.select().from(cards).where(eq(cards.ID, cardID)).get();
+
+        if (!card) {
+            return fail(404, { error: "Card not found" });
+        }
+
+        const event = db.select().from(events).where(eq(events.ID, card.eventID)).get();
+
+        if (!event) {
+            return fail(404, { error: "Event not found" });
+        }
+
+        const submittedData = Object.fromEntries(formData.entries());
+        delete submittedData.cardID;
+
+        try {
+            const schema = JSON.parse(event.schema);
+
+            const validate = ajv.compile(schema);
+            const valid = validate(submittedData);
+
+            if (!valid) {
+                return fail(400, { error: "Invalid data", details: validate.errors });
+            }
+        } catch {
+            return fail(400, { error: `Invalid event schema` });
+        }
+
+        db.update(cards)
+            .set({ data: JSON.stringify(submittedData) })
+            .where(eq(cards.ID, cardID))
+            .run();
+
+        return { success: true };
+    }
+}

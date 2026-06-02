@@ -1,17 +1,19 @@
 <script lang="ts">
-    import type { PageData } from './$types';
-    let { data }: { data: PageData } = $props();
+    import type { ActionData, PageData } from './$types';
+    import { enhance } from '$app/forms';
+    let { data, form }: { data: PageData, form: ActionData } = $props();
     let eventSchema = JSON.parse(data.event?.schema ?? '{}');
+    console.log(eventSchema);
 </script>
 
-{#if data.error}
-    <p>{data.error}</p>
-{:else}
-    <h1>{data.event?.name}</h1>
-    <img src={data.auth?.pfp} alt="Auth pfp" />
-    <p>{data.auth?.name}</p>
-    <p>Card ID: {data.card?.ID}</p>
-    <p>Event ID: {data.event?.ID}</p>
+<h1>{data.event?.name}</h1>
+<img src={data.auth?.pfp} alt="Auth pfp" />
+<p>{data.auth?.name}</p>
+<p>Card ID: {data.card?.ID}</p>
+<p>Event ID: {data.event?.ID}</p>
+
+<form method="POST" use:enhance>
+    <input type="hidden" name="cardID" value={data.card?.ID} />
 
     <!-- form -->
     {#each Object.keys(eventSchema.properties ?? {}) as prop (prop)}
@@ -25,13 +27,23 @@
         <!-- data input -->
 
         {#if eventSchema.properties[prop].formType === 'shorttext'}
-            <input type="text" placeholder={eventSchema.properties[prop].placeholder ?? ''} />
+            <input type="text" name={prop} placeholder={eventSchema.properties[prop].placeholder ?? ''} />
         {:else if eventSchema.properties[prop].formType === 'longtext'}
-            <textarea placeholder={eventSchema.properties[prop].placeholder ?? ''}></textarea>
+            <textarea name={prop} placeholder={eventSchema.properties[prop].placeholder ?? ''}></textarea>
         {:else if eventSchema.properties[prop].formType === 'bool'}
-            <input type="checkbox" />
+            <input type="checkbox" name={prop} />
         {/if}
 
         <hr />
     {/each}
+
+    <button type="submit">Submit</button>
+</form>
+
+{#if form?.error}
+    <p style="color: red; font-weight: bold;">❌ 에러 발생: {form.error}</p>
+{/if}
+
+{#if form?.success}
+    <p style="color: green; font-weight: bold;">🎉 성공: {form.error}</p>
 {/if}
