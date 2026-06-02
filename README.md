@@ -29,6 +29,24 @@ npm run dev
 npm run dev -- --open
 ```
 
+## Database (SQLite + Drizzle)
+
+Create an environment file using the example:
+
+```sh
+cp .env.example .env
+```
+
+Generate a migration from the schema and apply it:
+
+```sh
+npm run db:generate
+npm run db:migrate
+```
+
+The database schema is defined in [src/lib/server/db/schema.ts](src/lib/server/db/schema.ts).
+The Drizzle client is initialized in [src/lib/server/db/index.ts](src/lib/server/db/index.ts).
+
 ## Building
 
 To create a production version of your app:
