@@ -15,6 +15,7 @@ export const auths = sqliteTable("auths", {
     ID: text("id").primaryKey(), // uuid
     name: text("name").notNull(),
     pfp: text("pfp").notNull(),
+    publicInfo: text("public_info").notNull(), // json string
     info: text("info").notNull(), // json string
     createdAt: integer("created_at").notNull().$defaultFn(() => Date.now())
 });

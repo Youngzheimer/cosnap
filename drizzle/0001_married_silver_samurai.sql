@@ -1,0 +1,1 @@
+ALTER TABLE `auths` ADD `public_info` text NOT NULL;
