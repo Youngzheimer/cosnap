@@ -7,6 +7,9 @@ import Ajv from "ajv";
 
 const ajv = new Ajv({ allErrors: true });
 
+ajv.addKeyword("placeholder");
+ajv.addKeyword("formType");
+
 export const load: PageServerLoad = async ({ url }) => {
     const id = url.searchParams.get("id");
 
@@ -18,6 +21,10 @@ export const load: PageServerLoad = async ({ url }) => {
 
     if (!card) {
         return error(404, "Card not found");
+    }
+
+    if (card.submitted) {
+        return error(400, "Card already submitted");
     }
 
     const event = db.select().from(events).where(eq(events.ID, card.eventID)).get();
@@ -63,11 +70,25 @@ export const actions: Actions = {
             return fail(404, { error: "Event not found" });
         }
 
-        const submittedData = Object.fromEntries(formData.entries());
-        delete submittedData.cardID;
+        // Check if already submitted
+        if (card.submitted) {
+            return fail(400, { error: "Card already submitted" });
+        }
 
+        const submittedData: {
+            [k: string]: FormDataEntryValue | boolean; // allow boolean for checkbox values
+        } = Object.fromEntries(formData.entries()); 
+        delete submittedData.cardID;
+        
         try {
             const schema = JSON.parse(event.schema);
+
+            // convert checkbox values to boolean
+            for (const key of Object.keys(schema.properties || {})) {
+                if (schema.properties?.[key]?.type === "boolean") {
+                    submittedData[key] = submittedData[key] === "on" ? true : false;
+                }
+            }
 
             const validate = ajv.compile(schema);
             const valid = validate(submittedData);
@@ -80,7 +101,7 @@ export const actions: Actions = {
         }
 
         db.update(cards)
-            .set({ data: JSON.stringify(submittedData) })
+            .set({ data: JSON.stringify(submittedData), submitted: true, submittedAt: Date.now() })
             .where(eq(cards.ID, cardID))
             .run();
 
