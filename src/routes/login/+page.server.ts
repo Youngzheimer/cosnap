@@ -29,11 +29,10 @@ export const actions: Actions = {
             return fail(400, { error: "Invalid display ID or password" });
         }
 
-        const { sessionID, reftokenID } = await generateSession(auth.ID);
+        const { reftokenID } = await generateSession(auth.ID);
         const token = generateToken({ id: auth.ID, role: "user" });
 
-        cookies.set("sessionID", sessionID, { path: "/", httpOnly: true, sameSite: "strict" });
-        cookies.set("reftokenID", reftokenID, { path: "/", httpOnly: true, sameSite: "strict" });
+        cookies.set("reftoken", reftokenID, { path: "/", httpOnly: true, sameSite: "strict" });
         cookies.set("token", token, { path: "/", httpOnly: true, sameSite: "strict" });
 
         return { success: "Logged in successfully!" };
