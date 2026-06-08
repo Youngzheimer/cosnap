@@ -27,11 +27,15 @@
         <!-- data input -->
 
         {#if eventSchema.properties[prop].formType === 'shorttext'}
-            <input type="text" name={prop} placeholder={eventSchema.properties[prop].placeholder ?? ''} />
+            <input type="text" name={prop} placeholder={eventSchema.properties[prop].placeholder ?? ''} value={eventSchema.properties[prop].default ?? ''} />
         {:else if eventSchema.properties[prop].formType === 'longtext'}
-            <textarea name={prop} placeholder={eventSchema.properties[prop].placeholder ?? ''}></textarea>
+            <textarea name={prop} placeholder={eventSchema.properties[prop].placeholder ?? ''}>{eventSchema.properties[prop].default ?? ''}</textarea>
         {:else if eventSchema.properties[prop].formType === 'bool'}
-            <input type="checkbox" name={prop} />
+            {#if eventSchema.properties[prop].default === "true"}
+                <input type="checkbox" name={prop} checked />
+            {:else}
+                <input type="checkbox" name={prop} />
+            {/if}
         {/if}
 
         <hr />
@@ -45,5 +49,5 @@
 {/if}
 
 {#if form?.success}
-    <p style="color: green; font-weight: bold;">🎉 성공: {form.error}</p>
+    <p style="color: green; font-weight: bold;">🎉 성공: {form.success}</p>
 {/if}
