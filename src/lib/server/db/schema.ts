@@ -13,6 +13,8 @@ export const cards = sqliteTable("cards", {
 
 export const auths = sqliteTable("auths", {
     ID: text("id").primaryKey(), // uuid
+    displayID: text("display_id").notNull().unique(), // human readable unique id for login
+    passwordHash: text("password_hash").notNull(),
     name: text("name").notNull(),
     pfp: text("pfp").notNull(),
     publicInfo: text("public_info").notNull(), // json string
