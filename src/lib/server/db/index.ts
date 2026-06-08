@@ -23,6 +23,8 @@ const sqlite = new Database(filePath);
 
 export const db = drizzle(sqlite, { schema });
 
+sqlite.pragma('foreign_keys = ON');
+
 if (dev) {
     const authID = uuidv4();
     const eventID = uuidv4();
