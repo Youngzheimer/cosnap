@@ -15,6 +15,20 @@
       "when": 1780374682922,
       "tag": "0001_married_silver_samurai",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1780898240274,
+      "tag": "0002_chunky_green_goblin",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1780899237948,
+      "tag": "0003_wide_senator_kelly",
+      "breakpoints": true
     }
   ]
 }
