@@ -5,6 +5,7 @@ import { eq } from "drizzle-orm";
 import { generateToken } from "$lib/server/jwt";
 import { dev } from '$app/environment';
 import { redirect } from "@sveltejs/kit";
+import { generateSession } from "$lib/server/reftoken";
 
 export const load: PageServerLoad = async () => {
     if (!dev) {
@@ -31,8 +32,11 @@ export const actions: Actions = {
             return { success: false, error: "Auth not found" };
         }
 
+        const session = await generateSession(auth.ID);
+
         const jwt = generateToken({ id: auth.ID, role: "photographer" }); // FIXME
         cookies.set("token", jwt, { path: "/" });
+        cookies.set("reftoken", session.reftokenID, { path: "/" });
         
         return { success: true };
     }
