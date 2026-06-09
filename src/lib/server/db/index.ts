@@ -32,7 +32,7 @@ if (dev) {
 
     db.insert(auths).values({
         "ID": authID,
-        "displayID": "johnpork",
+        "displayID": "johnpork" + authID.slice(0, 8), // johnpork + random suffix to avoid conflicts
         "name": "John Pork",
         "passwordHash": "dummyhash", // not used in dev value
         "pfp": "https://i.pravatar.cc/300?img=1",

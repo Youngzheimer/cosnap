@@ -21,11 +21,12 @@ export const handle: Handle = async ({ event, resolve }) => {
 
                     // generate new jwt
                     // FIXME: hardcoding role for now since we only have one role
-                    const newToken = generateToken({ id: sessionID, role: "photographer" });
+                    const newToken = generateToken(sessionID);
                     event.cookies.set('token', newToken, { httpOnly: true, path: '/' });
                     event.cookies.set('reftoken', reftokenID, { httpOnly: true, path: '/' });
 
-                    event.locals.user = { id: sessionID, role: "photographer" }; // FIXME
+                    const newUser = verifyToken(newToken)!;
+                    event.locals.user = newUser;
                 } catch {
                     // invalid refresh token - clear cookies
                     event.cookies.delete('token', { path: '/' });

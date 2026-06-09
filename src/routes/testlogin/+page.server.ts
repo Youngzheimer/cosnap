@@ -34,7 +34,7 @@ export const actions: Actions = {
 
         const session = await generateSession(auth.ID);
 
-        const jwt = generateToken({ id: auth.ID, role: "photographer" }); // FIXME
+        const jwt = generateToken(session.sessionID);
         cookies.set("token", jwt, { path: "/" });
         cookies.set("reftoken", session.reftokenID, { path: "/" });
         

@@ -46,6 +46,7 @@
 		"drizzle-kit": "^0.31.10",
 		"drizzle-orm": "^0.45.2",
 		"jsonwebtoken": "^9.0.3",
+		"sveltekit-flash-message": "^2.4.6",
 		"uuid": "^14.0.0"
 	}
 }
