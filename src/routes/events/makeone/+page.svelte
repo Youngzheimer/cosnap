@@ -65,7 +65,7 @@
                 <textarea placeholder="기본값 입력" bind:value={field.default}></textarea>
             {/if}
         </div>
-        <hr
+        <hr>
     {/each}
 
     <label for="submitExpiry">제출 마감일</label>
