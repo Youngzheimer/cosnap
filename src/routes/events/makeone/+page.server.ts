@@ -1,5 +1,6 @@
 import type { Actions } from './$types';
 import { db } from "$lib/server/db/index";
+import { redirect, isRedirect } from '@sveltejs/kit';
 import { events } from "$lib/server/db/schema";
 import { fail } from 'assert/strict';
 import { v4 as uuidv4 } from 'uuid';
@@ -82,13 +83,17 @@ export const actions: Actions = {
                 submitExpiry: submitExpiryDate.getTime(),
             });
 
-            return {
-                success: true,
-                eventId
-            };
+            throw redirect(303, `/events/${eventId}`);
         } catch (error) {
+            if (isRedirect(error)) {
+                throw error; // 리디렉션 예외는 그대로 던집니다.
+            }
+
             console.error('Error creating event:', error);
-            return fail(500, { message: 'An error occurred while creating the event' });
+            return {
+                success: false,
+                message: 'Failed to create event'
+            }
         }
     }
 }

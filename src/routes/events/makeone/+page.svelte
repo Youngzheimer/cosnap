@@ -40,8 +40,8 @@
     }
 </script>
 
-{#if form?.error}
-    <p class="alert error" role="alert">{form.error}</p>
+{#if !form?.success}
+    <p class="alert error" role="alert">{form?.message}</p>
 {/if}
 
 <p>
