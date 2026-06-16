@@ -34,15 +34,29 @@ export const actions: Actions = {
 
         console.log('Received formSchema:', formSchema);
 
-        const properties: Record<string, any> = {};
-        formSchema.forEach((field: any) => {
+        type EventSchema = {
+            title: string;
+            description: string;
+            type: string;
+            placeholder: string;
+            formType: string;
+            default: string | boolean;
+        };
+
+        type FormSchemaForMakingOne = FormSchema & {
+            id: string; 
+            required: boolean;
+        }; 
+
+        const properties: Record<string, EventSchema> = {};
+        formSchema.forEach((field: FormSchemaForMakingOne) => {
             properties[field.id] = {  
-                title: field.title,
-                type: field.type,
-                description: field.description,
-                placeholder: field.placeholder,
-                formType: field.formType,
-                default: field.default
+                title: field.title as string,
+                description: field.description as string,
+                type: field.type as string,
+                placeholder: field.placeholder as string,
+                formType: field.formType as string,
+                default: field.default as string | boolean,
             };
         });
 
@@ -51,7 +65,7 @@ export const actions: Actions = {
             'description': description,
             'type': 'object',
             'properties': properties,
-            'required': formSchema.filter((field: any) => field.required).map((field: any) => field.id)
+            'required': formSchema.filter((field: FormSchemaForMakingOne) => field.required).map((field: FormSchemaForMakingOne) => field.id)
         }
 
         console.log('Constructed schema:', schema);
