@@ -6,6 +6,8 @@
 
 </script>
 
+<a href="{resolve('/events/makeone')}" class="button">Create Event</a>
+
 {#if data.events.length === 0}
     <p>No events found. Create one?</p>
 {:else}

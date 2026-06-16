@@ -4,8 +4,11 @@
 
     let { form }: { form: ActionData } = $props();
 
+    let timezone = new Date().getTimezoneOffset();
+
     type FormSchemaForMakingOne = FormSchema & {
         id: string; 
+        required: boolean;
     };
 
     let formSchema: FormSchemaForMakingOne[] = $state([]);
@@ -23,6 +26,7 @@
             description: "",
             placeholder: "",
             default: selectedValue === "bool" ? false : "",
+            required: false,
             id: crypto.randomUUID()
         };
 
@@ -30,13 +34,24 @@
 
         selectedValue = "";
     }
+
+    function deleteField(e: Event) {
+        
+    }
 </script>
 
 {#if form?.error}
     <p class="alert error" role="alert">{form.error}</p>
 {/if}
 
+<p>
+    {JSON.stringify(formSchema, null, 2)}
+</p>
+
 <form method="POST" use:enhance>
+    <input type="hidden" name="formSchema" value={JSON.stringify(formSchema)}>
+    <input type="hidden" name="timezone" value={timezone}>
+
     <select onchange={addField} bind:value={selectedValue}>
         <option value="" disabled selected>필드 유형 선택</option>
         <option value="bool">체크박스</option>
@@ -47,6 +62,9 @@
     <label for="name">이벤트 이름</label>
     <input type="text" id="name" name="name" required />
 
+    <label for="description">이벤트 설명</label>
+    <input type="text" id="description" name="description" required />
+
     {#each formSchema as field (field.id)}
         <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
             <label>필드 제목</label>
@@ -54,6 +72,9 @@
 
             <label>필드 설명</label>
             <input type="text" bind:value={field.description}>
+
+            <label>
+            <input type="checkbox" bind:checked={field.required}> 필수 여부
 
             {#if field.formType === "bool"}
                 <input type="checkbox" bind:checked={field.default as boolean}> 
@@ -64,6 +85,8 @@
                 <input type="text" placeholder="플레이스홀더 입력" bind:value={field.placeholder}>
                 <textarea placeholder="기본값 입력" bind:value={field.default}></textarea>
             {/if}
+
+            <button onclick={deleteField}>필드 삭제</button>
         </div>
         <hr>
     {/each}
