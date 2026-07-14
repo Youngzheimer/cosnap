@@ -28,11 +28,14 @@ export const actions: Actions = {
             return { error: "Invalid card number" };
         }
 
+        const existingCards = await db.select().from(cards).where(eq(cards.eventID, eventId));
+        const maxIndex = existingCards.length > 0 ? Math.max(...existingCards.map((c) => c.index)) : 0;
+
         const newCards = Array.from({ length: Number(cardNum) }, (_, i) => ({
             ID: crypto.randomUUID(),
             authID: user!.id,
             eventID: eventId,
-            index: i,
+            index: maxIndex + i + 1,
             submitted: false,
             submittedAt: 0,
             data: "{}"
