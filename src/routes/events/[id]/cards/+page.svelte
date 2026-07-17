@@ -2,7 +2,8 @@
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
   import QRCode from '@castlenine/svelte-qrcode';
-import {
+  import QRCodeLib from 'qrcode'; // PNG 생성을 위한 라이브러리 추가
+  import {
     createTable,
     tableFeatures,
     FlexRender,
@@ -20,8 +21,7 @@ import {
 
   let { data }: { data: PageData } = $props();
 
-  // beta부터 언더스코어 없이 `features`
-const features = tableFeatures({
+  const features = tableFeatures({
     rowSortingFeature,
     globalFilteringFeature,
     sortedRowModel: createSortedRowModel(sortFns),
@@ -110,8 +110,7 @@ const features = tableFeatures({
     }
   ]);
 
-  // 명시적 제네릭 없이, features/columns/data로부터 자연스럽게 추론되게 둠
-const table = createTable({
+  const table = createTable({
     features,
     get columns() {
       return columns;
@@ -128,19 +127,62 @@ const table = createTable({
       globalFilter = typeof updater === 'function' ? updater(globalFilter) : updater;
     }
   });
+
+  // --- 추가된 다운로드 로직 ---
+  async function downloadAllQRs() {
+    if (!flatCards || flatCards.length === 0) {
+      alert('다운로드할 QR 코드가 없습니다.');
+      return;
+    }
+
+    for (const card of flatCards) {
+      const url = `${window.location.origin}/qr?id=${card.ID}`;
+      
+      try {
+        // 1. QR 코드를 PNG Data URL 형식으로 생성
+        const dataUrl = await QRCodeLib.toDataURL(url, {
+          width: 300, // 다운로드될 이미지 사이즈 조정 가능
+          margin: 2
+        });
+
+        // 2. index 5자리 패딩 + UUID 형식으로 파일명 구성
+        const paddedIndex = String(card.index).padStart(5, '0');
+        const fileName = `${paddedIndex}_${card.ID}.png`;
+
+        // 3. 가상의 a 태그를 만들어 다운로드 트리거
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        // ※ 중요: 브라우저가 다중 다운로드를 스팸으로 인식해 차단하는 것을 막기 위한 약간의 딜레이
+        await new Promise(resolve => setTimeout(resolve, 150));
+      } catch (error) {
+        console.error(`QR 코드 생성 실패 (ID: ${card.ID}):`, error);
+      }
+    }
+  }
 </script>
 
 {#if !data.event}
   <p>Event not found. Return to <a href="{resolve('/events')}">events list</a>.</p>
 {:else}
-  <form method="post" use:enhance>
-    <label for="cardNum">몇개:</label>
-    <input type="text" id="cardNum" name="cardNum" />
-    <button type="submit">Add Card</button>
-  </form>
+  <div class="controls-container">
+    <form method="post" use:enhance class="add-form">
+      <label for="cardNum">몇개:</label>
+      <input type="text" id="cardNum" name="cardNum" />
+      <button type="submit">Add Card</button>
+    </form>
+
+    <button class="download-btn" onclick={downloadAllQRs}>
+      Download ALL QR
+    </button>
+  </div>
 
   <div class="table-wrapper">
-  <input type="text" placeholder="검색..." bind:value={globalFilter} />
+    <input type="text" placeholder="검색..." bind:value={globalFilter} class="search-input" />
     <table>
       <thead>
         {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
@@ -179,6 +221,42 @@ const table = createTable({
 {/if}
 
 <style>
+  .controls-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .add-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .download-btn {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+
+  .download-btn:hover {
+    background-color: #4338ca;
+  }
+
+  .search-input {
+    margin-bottom: 1rem;
+    padding: 0.4rem;
+    width: 200px;
+  }
+
   .table-wrapper {
     overflow-x: auto;
     margin-top: 1rem;

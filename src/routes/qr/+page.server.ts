@@ -86,7 +86,7 @@ export const actions: Actions = {
             // convert checkbox values to boolean
             for (const key of Object.keys(schema.properties || {})) {
                 if (schema.properties?.[key]?.type === "boolean") {
-                    submittedData[key] = submittedData[key] === "on" ? true : false;
+                    submittedData[key] = submittedData[key] === "on" ? false : true;
                 }
             }
 

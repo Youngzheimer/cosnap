@@ -1,3 +1,5 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
+
 :root {
 	--bg: #f5f3ee;
 	--surface: #fffdf9;
@@ -36,6 +38,7 @@ body {
 	background: var(--bg);
 	color: var(--text);
 	font-family:
+		'Pretendard',
 		Inter,
 		'SF Pro Text',
 		'SF Pro Display',
@@ -207,4 +210,627 @@ a {
 		padding: 22px 16px;
 		border-radius: 18px;
 	}
+}
+
+.event-page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	height: 100dvh;
+}
+
+.event-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-direction: column;
+	margin-top: 20px;
+	width: 100%;
+	max-width: var(--content-max);
+}
+
+.event-header h1 {
+	margin: 12px 0;
+	font-size: clamp(1.75rem, 6vw, 2.4rem);
+	line-height: 1.02;
+	letter-spacing: -0.04em;
+	width: 100%;
+	text-align: center;
+}
+
+.event-button-group {
+	/* margin-top: 12px; */
+	display: flex;
+	gap: 10px;
+	justify-content: right;
+	width: 100%;
+	padding: 0 16px;
+}
+
+.event-button-group .button {
+	width: auto;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 40px;
+	text-decoration: none;
+	font-weight: 400;
+	padding: 0 12px;
+}
+
+.event-list {
+	flex: 1;
+	margin-top: 24px;
+	display: flex;
+	gap: 16px;
+	padding: 0 16px;
+	align-items: flex-start;
+	flex-direction: column;
+	width: 100%;
+	max-width: var(--content-max);
+}
+
+.event-list .no-events {
+	padding: 40px;
+	text-align: center;
+	color: var(--text-subtle);
+	font-size: 1.1rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.event-list .event-card {
+	height: auto;
+	width: 100%;
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+	background: var(--surface);
+	padding: 16px;
+	box-shadow: var(--shadow-sm);
+	text-decoration: none;
+	display: flex;
+	flex-direction: row;
+	gap: 0px;
+	transition: 120ms ease;
+}
+
+.event-list .event-card:hover {
+	transform: scale(1.005);
+}
+
+.event-list .event-card h3 {
+	margin: 0 0 4px;
+	font-size: 1.25rem;
+}
+
+.event-list .event-card .event-card-left {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.event-list .event-card .event-card-right {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	justify-content: space-between;
+}
+
+.createvent-page {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.createvent-page h1 {
+	margin: 32px 0 12px;
+	font-size: clamp(1.75rem, 6vw, 2.4rem);
+	line-height: 1.02;
+	letter-spacing: -0.04em;
+	width: 100%;
+	text-align: center;
+}
+
+.createvent-page .goback-container {
+	width: 100%;
+	max-width: var(--content-max);
+	padding: 0 24px;
+	margin-bottom: 12px;
+}
+
+.createvent-page button.goback {
+	background: var(--text);
+	color: white;
+	border: none;
+	height: 36px;
+	padding: 0 12px;
+	border-radius: var(--radius-md);
+	transition: 120ms ease;
+	cursor: pointer;
+}
+
+.createvent-page button.goback:hover {
+	transform: scale(1.02);
+}
+
+
+.createvent-page form {
+	width: 100%;
+	max-width: var(--content-max);
+	padding: 0 16px;
+}
+
+/* .createvent-page form label {
+	font-weight: 600;
+	letter-spacing: 0.02em;
+	font-size: 1.25rem;
+	display: block;
+} */
+
+.createvent-page form .topinput {
+	border: none;
+	width: 100%;
+	padding: 8px 12px;
+	/* margin: 0 12px; */
+	background: #f5f3ee;
+	outline: none;
+	-webkit-tap-highlight-color: transparent;
+}
+
+.createvent-page form .topinput.title {
+	font-weight: 600;
+	font-size: 1.6rem;
+	margin-bottom: 8px;
+}
+
+.createvent-page form .topinput.title::placeholder {
+	font-weight: 600;
+	font-size: 1.6rem;
+	font-family: 'Pretendard';
+}
+
+.createvent-page form .topinput.desc {
+	font-weight: 400;
+	font-size: 1.2rem;
+	margin-bottom: 4px;
+	resize: vertical;
+}
+
+.createvent-page form .topinput.desc::placeholder {
+	font-weight: 400;
+	font-size: 1.2rem;
+	font-family: 'Pretendard';
+}
+
+
+.createvent-page form .field-list {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+	padding: 24px 16px;
+	background: var(--surface);
+}
+
+.createvent-page form .field-adder {
+	width: 100%;
+	display: flex;
+	justify-content: flex-end;
+}
+
+.createvent-page form .field-adder select {
+	border: 1px solid var(--line);
+	border-radius: var(--radius-md);
+	padding: 6px 12px;
+	margin-bottom: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.createvent-field {
+	margin-top: 4px;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.createvent-field .field-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.createvent-field .field-header-left {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	/* justify-content: center; */
+	gap: 8px;
+	flex: 1;
+}
+
+.createvent-field .field-header-right {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+}
+
+.createvent-field .field-header-right .move-buttons-wrapper {
+	width: 100px;
+	display: flex;
+	justify-content: space-between;
+	margin: none;
+	gap: 4px;
+	margin-right: 10px;
+}
+
+.createvent-field .field-header-right .move-buttons-wrapper .move {
+	margin: 0;
+}
+
+.createvent-field .field-header-right button {
+	border: none;
+	padding: 4px 12px;
+	height: 32px;
+	width: 100px;
+	font-weight: 300;
+	background: var(--surface-muted);
+	color: black;
+	margin-right: 10px;
+	transition: 120ms ease;
+}
+
+.createvent-field .field-header-right button.delete {
+	background: var(--danger-bg);
+	color: var(--danger);
+}
+
+.createvent-field .field-header-right button:hover {
+	transform: scale(1.02);
+}
+
+.createvent-field .field-header-right button.on {
+	background: var(--success-bg);
+	color: var(--success);
+}
+
+.createvent-field .form-title {
+	width: 100%;
+	border: none;
+	margin-top: 4px;
+	padding: 8px 12px;
+	height: 40px;
+	font-weight: 600;
+	font-size: 1.6rem;
+	-webkit-tap-highlight-color: transparent;
+	outline: none;
+	background: var(--surface);
+}
+
+.createvent-field .bool {
+	margin-top: 16px;
+}
+
+.createvent-field .form-title::placeholder {
+	font-weight: 600;
+	font-size: 1.6rem;
+	font-family: 'Pretendard';
+}
+
+.createvent-field .form-description {
+	width: 100%;
+	border: none;
+	padding: 8px 12px;
+	height: 25px;
+	font-weight: 400;
+	font-size: 1rem;
+	-webkit-tap-highlight-color: transparent;
+	outline: none;
+	color: var(--text-subtle);
+	background: var(--surface);
+}
+
+.createvent-field .form-description::placeholder {
+	font-weight: 400;
+	font-size: 1rem;
+	font-family: 'Pretendard';
+}
+
+.createvent-field .field-body {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 12px 8px;
+}
+
+.createvent-field .field-body .shorttext-placeholder,
+.createvent-field .field-body .longtext-placeholder {
+	border: 1px solid var(--line);
+	border-radius: var(--radius-sm);
+	padding: 6px 12px;
+	height: 34px;
+}
+
+.createvent-field .field-body .shorttext-default {
+	border: 1px solid var(--line);
+	border-radius: var(--radius-sm);
+	padding: 6px 12px;
+	height: 34px;
+}
+
+.createvent-field .field-body .longtext-default {
+	border: 1px solid var(--line);
+	border-radius: var(--radius-sm);
+	padding: 6px 12px;
+	height: 80px;
+	resize: none;
+}
+
+.createvent-page form .field-list hr {
+	width: calc(100% - 32px);
+	height: 1px;
+	background: var(--line);
+	border: none;
+}
+
+.createvent-page form label[for="submitExpiry"] {
+	font-weight: 400;
+	display:block;
+	margin-top: 12px;
+}
+
+.createvent-page form button[type="submit"] {
+	margin-top: 24px;
+	width: 100%;
+	height: 50px;
+	border: 0;
+	background: var(--text);
+	color: white;
+	font-weight: 700;
+	cursor: pointer;
+	border-radius: var(--radius-md);
+	transition: 120ms ease;
+}
+
+.createvent-page form button[type="submit"]:hover {
+	transform: scale(1.005);
+}
+
+/* QR */
+
+.submit-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 40px 16px;
+}
+
+.submit-page .submit-container {
+    width: 100%;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* Header */
+.submit-page .submit-header {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.submit-page .form-title {
+    margin: 0;
+    font-size: clamp(2rem, 6vw, 2.8rem);
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    text-align: center;
+    color: var(--text);
+}
+
+.submit-page .form-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    padding-top: 16px;
+    border-top: 2px solid var(--text);
+}
+
+.submit-page .form-description {
+    flex: 1;
+}
+
+.submit-page .form-description p {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--text-subtle);
+    line-height: 1.6;
+    word-break: keep-all;
+}
+
+.submit-page .photographer-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--surface);
+    padding: 10px 16px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    flex-shrink: 0;
+}
+
+.submit-page .photographer-info .pfp {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid var(--line-strong);
+}
+
+.submit-page .photographer-info .info-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.submit-page .photographer-info .label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    letter-spacing: 0.05em;
+}
+
+.submit-page .photographer-info .name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text);
+}
+
+/* Fields */
+.submit-page .submit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.submit-page .field-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.submit-page .form-field {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.submit-page .field-header h3 {
+    margin: 0 0 6px 0;
+    font-size: 1.25rem;
+    color: var(--text);
+}
+
+.submit-page .field-header p {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text-subtle);
+}
+
+.submit-page .input.textarea {
+    height: 120px;
+    padding: 14px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* O/X Toggle Button */
+.submit-page .ox-toggle {
+    display: inline-flex; /* inline-block 대신 inline-flex로 너비 붕괴 방지 */
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    width: 140px; /* 기본 너비 확실하게 고정 */
+    flex-shrink: 0; /* 어떤 부모 밑에 있어도 절대 줄어들지 않도록 설정 */
+}
+
+.submit-page .ox-toggle input[type="checkbox"] {
+    display: none;
+}
+
+.submit-page .ox-slider {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 48px;
+    background: var(--surface-muted);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    flex-shrink: 0; /* 이중 보안으로 축소 방지 */
+    min-width: 140px; /* 모바일에서도 이 이하로는 절대 안 줄어듦 */
+}
+
+.submit-page .ox-slider .slider-bg {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    bottom: 4px;
+    width: calc(50% - 4px);
+    background: #fff;
+    border-radius: calc(var(--radius-lg) - 4px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1;
+}
+
+.submit-page .ox-slider span {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    font-weight: 700;
+    z-index: 2;
+    transition: color 0.3s ease;
+    color: var(--text-subtle);
+}
+
+.submit-page .ox-toggle input[type="checkbox"]:checked + .ox-slider .slider-bg {
+    transform: translateX(100%);
+}
+
+.submit-page .ox-toggle input[type="checkbox"]:checked + .ox-slider .text-o {
+    color: var(--success);
+}
+
+.submit-page .ox-toggle input[type="checkbox"]:not(:checked) + .ox-slider .text-x {
+    color: var(--danger);
+}
+
+/* =========================================
+   Mobile Optimization (미디어 쿼리 내 수정)
+========================================= */
+@media (max-width: 600px) {
+    .submit-page {
+        padding: 24px 16px;
+    }
+
+    .submit-page .form-meta {
+        flex-direction: column-reverse;
+        gap: 16px;
+    }
+    
+    .submit-page .photographer-info {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .submit-page .form-field {
+        padding: 20px 16px;
+        border-radius: var(--radius-md);
+    }
+    
+    /* 모바일에서 버튼 크기를 조금 더 키우고 싶다면 여기를 조절 (최소 140px 보장) */
+    .submit-page .ox-toggle {
+        width: 100%;
+        max-width: 160px; 
+    }
+    .submit-page .ox-slider {
+        width: 100%;
+        min-width: 140px; 
+    }
 }

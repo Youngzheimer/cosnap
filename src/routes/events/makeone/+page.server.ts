@@ -7,7 +7,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const actions: Actions = {
     default: async (event) => {
-        // TODO: 스키마 검증후 이벤트 생성
         const user = event.locals.user;
         const formData = await event.request.formData();
         let formSchema = JSON.parse(formData.get('formSchema') as string);

@@ -15,6 +15,11 @@ declare global {
 				| { title: string; description?: string }       // title 필수
 				| { title?: string; description: string }       // description 필수
 			);
+
+			export type FormSchemaForMakingOne = FormSchema & {
+				id: string; 
+				required: boolean;
+			};
 	namespace App {
 		// interface Error {}
 		interface Locals {
