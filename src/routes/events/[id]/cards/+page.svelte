@@ -2,11 +2,17 @@
   import { enhance } from '$app/forms';
   import { resolve } from '$app/paths';
   import QRCode from '@castlenine/svelte-qrcode';
-  import {
+import {
     createTable,
     tableFeatures,
     FlexRender,
     renderComponent,
+    rowSortingFeature,
+    globalFilteringFeature,
+    createSortedRowModel,
+    createFilteredRowModel,
+    sortFns,
+    filterFns,
     type ColumnDef
   } from '@tanstack/svelte-table';
   import type { Component } from 'svelte';
@@ -15,7 +21,14 @@
   let { data }: { data: PageData } = $props();
 
   // beta부터 언더스코어 없이 `features`
-  const features = tableFeatures({});
+const features = tableFeatures({
+    rowSortingFeature,
+    globalFilteringFeature,
+    sortedRowModel: createSortedRowModel(sortFns),
+    filteredRowModel: createFilteredRowModel(),
+    filterFns
+  });
+  let globalFilter = $state('');
 
   type FlatCard = {
     ID: string;
@@ -98,13 +111,21 @@
   ]);
 
   // 명시적 제네릭 없이, features/columns/data로부터 자연스럽게 추론되게 둠
-  const table = createTable({
+const table = createTable({
     features,
     get columns() {
       return columns;
     },
     get data() {
       return flatCards;
+    },
+    state: {
+      get globalFilter() {
+        return globalFilter;
+      }
+    },
+    onGlobalFilterChange: (updater) => {
+      globalFilter = typeof updater === 'function' ? updater(globalFilter) : updater;
     }
   });
 </script>
@@ -119,14 +140,23 @@
   </form>
 
   <div class="table-wrapper">
+  <input type="text" placeholder="검색..." bind:value={globalFilter} />
     <table>
       <thead>
         {#each table.getHeaderGroups() as headerGroup (headerGroup.id)}
           <tr>
             {#each headerGroup.headers as header (header.id)}
-              <th>
+              <th
+                onclick={header.column.getToggleSortingHandler()}
+                class:sortable={header.column.getCanSort()}
+              >
                 {#if !header.isPlaceholder}
                   <FlexRender {header} />
+                  {#if header.column.getIsSorted() === 'asc'}
+                    🔼
+                  {:else if header.column.getIsSorted() === 'desc'}
+                    🔽
+                  {/if}
                 {/if}
               </th>
             {/each}
